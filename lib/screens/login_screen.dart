@@ -1,18 +1,38 @@
+import 'dart:convert';
 import 'package:code_hunt_todo_app/avatars.dart';
-import 'package:code_hunt_todo_app/screens/login_screen.dart';
+import 'package:code_hunt_todo_app/config.dart';
+import 'package:code_hunt_todo_app/screens/sign_up_screen.dart';
+import 'package:code_hunt_todo_app/screens/to_do_list_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:code_hunt_todo_app/config.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
-  final _emailController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
+  var _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  Future<void> registerUser() async {
+    var regBody = {
+      'email': _emailController.text,
+      'password': _passwordController.text
+    };
+    print(regBody);
+    var response = await http.post(Uri.parse(registration),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(regBody));
+    print('hello dinshad');
+    print(regBody);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +59,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Sign up',
+                        'Log in',
                         style: TextStyle(
                             color: Colors.blueAccent,
                             fontSize: 35,
@@ -50,6 +70,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
+                      controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                           prefixIcon: const Icon(
@@ -71,6 +92,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
+                      controller: _passwordController,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Enter Password';
@@ -99,11 +121,16 @@ class _SignupScreenState extends State<SignupScreen> {
                               MaterialStateProperty.all(const Size(280, 60)),
                           backgroundColor: const MaterialStatePropertyAll(
                               Color.fromARGB(255, 209, 134, 226))),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {}
+                        registerUser();
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ToDoListScreen();
+                        }));
                       },
                       child: const Text(
-                        'Sign up',
+                        'Log in',
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -117,17 +144,17 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Already have an account"),
+                  const Text("Don't have an account?"),
                   TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) {
-                            return const LoginScreen();
+                            return const SignupScreen();
                           }),
                         );
                       },
-                      child: Text('Log in'))
+                      child: const Text('Sign up'))
                 ],
               ),
             ),

@@ -1,4 +1,8 @@
+import 'package:code_hunt_todo_app/screens/login_screen.dart';
 import 'package:code_hunt_todo_app/screens/sign_up_screen.dart';
+import 'package:code_hunt_todo_app/screens/splash_screen.dart';
+import 'package:code_hunt_todo_app/screens/to_do_list_screen.dart';
+import 'package:code_hunt_todo_app/screens/todo_box_edit_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,13 +19,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Scaffold(
-        body: SignupScreen(),
-      ),
-      // This trailing comma makes auto-formatting nicer for build methods.
+      home: const SplashScreen(),
     );
   }
 }
